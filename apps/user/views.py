@@ -34,4 +34,3 @@ class CourseCategoryModelViewSet(ModelViewSet):
 
         return super(self.__class__, self).get_permissions()
 
-# write something

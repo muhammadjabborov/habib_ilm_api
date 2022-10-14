@@ -33,5 +33,3 @@ class CourseCategoryModelViewSet(ModelViewSet):
             self.permission_classes = [AllowAny, ]
 
         return super(self.__class__, self).get_permissions()
-
-# 12323

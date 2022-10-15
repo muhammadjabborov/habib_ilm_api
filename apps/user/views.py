@@ -1,13 +1,17 @@
+from rest_framework import status
 from rest_framework.filters import SearchFilter
+from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 
 from apps.user.models import CourseCategory, Course, Teacher
 from apps.user.serializers import CourseCategoryModelSerializer, ListCourseCategoryModelSerializer, \
     CreateCourseCategoryModelSerializer, RetrieveCourseCategoryModelSerializer, UpdateCourseCategoryModelSerializer, \
     TeacherModelSerializer, ListTeacherModelSerializer, CreateTeacherModelSerializer, RetrieveTeacherModelSerializer, \
-    UpdateTeacherModelSerializer
+    UpdateTeacherModelSerializer, CourseModelSerializer, ListCourseModelSerializer, CreateCourseModelSerializer
 
 
 class CourseCategoryModelViewSet(ModelViewSet):
@@ -64,3 +68,22 @@ class TeacherModelViewSet(ModelViewSet):
 
         return super(self.__class__, self).get_permissions()
 
+
+class CourseAPIView(GenericAPIView):
+    queryset = Course.objects.all().order_by('created_at')
+    serializer_class = CourseModelSerializer
+    permission_classes = [AllowAny]
+    lookup_url_kwarg = 'id'
+    parser_classes = [MultiPartParser]
+
+    def get(self, request, format=None):
+        courses = Course.objects.all()
+        serializer = ListCourseModelSerializer(courses, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = CreateCourseModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

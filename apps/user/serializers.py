@@ -61,7 +61,7 @@ class ListTeacherModelSerializer(ModelSerializer):
 
     class Meta:
         model = Teacher
-        fields = ('id', 'first_name', 'last_name', 'image', 'direction')
+        fields = ('id', 'full_name', 'image', 'direction')
 
 
 class CreateTeacherModelSerializer(ModelSerializer):
@@ -83,12 +83,29 @@ class RetrieveTeacherModelSerializer(ModelSerializer):
 
     class Meta:
         model = Teacher
-        fields = ('id', 'image', 'rating', 'first_name', 'last_name', 'direction', 'description', 'url_video')
+        fields = ('id', 'image', 'rating', 'full_name', 'direction', 'description', 'url_video')
 
-# class ListCourseModelSerializer(ModelSerializer):
-#
-#     def to_representation(self, instance):
-#         represent = super().to_representation(instance)
-#         represent['']
-#         represent['category'] = CourseCategoryModelSerializer(instance.category).data
-#         return represent
+
+class CourseModelSerializer(ModelSerializer):
+    class Meta:
+        model = Course
+        fields = '__all__'
+
+
+class ListCourseModelSerializer(ModelSerializer):
+
+    def to_representation(self, instance):
+        represent = super().to_representation(instance)
+        represent['full_name'] = TeacherModelSerializer(instance.full_name).data
+        represent['category'] = CourseCategoryModelSerializer(instance.category).data
+        return represent
+
+    class Meta:
+        model = Course
+        exclude = ('created_at', 'updated_at')
+
+
+class CreateCourseModelSerializer(ModelSerializer):
+    class Meta:
+        model = Course
+        exclude = ('created_at', 'updated_at')

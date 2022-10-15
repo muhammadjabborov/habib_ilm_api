@@ -25,8 +25,7 @@ class CourseCategory(BaseModel):
 
 
 class Teacher(BaseModel):
-    first_name = CharField(max_length=255)
-    last_name = CharField(max_length=255)
+    full_name = CharField(max_length=255)
     direction = ForeignKey(CourseCategory, on_delete=PROTECT)
     image = ImageField(upload_to='icons/')
     rating = FloatField(
@@ -37,6 +36,9 @@ class Teacher(BaseModel):
     )
     description = CharField(max_length=522)
     url_video = CharField(max_length=255)
+
+    def __str__(self):
+        return self.full_name
 
     class Meta:
         db_table = 'teachers'
@@ -56,6 +58,9 @@ class Course(BaseModel):
     description = CharField(max_length=522)
     category = ForeignKey(CourseCategory, on_delete=PROTECT)
 
+    def __str__(self):
+        return self.title
+
     class Meta:
         db_table = 'courses'
 
@@ -65,6 +70,9 @@ class Student(BaseModel):
     course = ForeignKey(CourseCategory, on_delete=PROTECT)
     description = CharField(max_length=522)
 
+    def __str__(self):
+        return self.full_name
+
     class Meta:
         db_table = 'students'
 
@@ -73,6 +81,9 @@ class CourseNew(BaseModel):
     image = ImageField(upload_to='icons/')
     title = CharField(max_length=255)
     description = CharField(max_length=522)
+
+    def __str__(self):
+        return self.title
 
     class Meta:
         db_table = 'news'
@@ -85,6 +96,9 @@ class CourseComplain(BaseModel):
     ])
     description = CharField(max_length=522)
 
+    def __str__(self):
+        return self.first_name
+
     class Meta:
         db_table = 'complains'
 
@@ -95,6 +109,9 @@ class Customer(BaseModel):
     phone_number = CharField(max_length=9, validators=[
         MaxValueValidator(9, 'Should be 9')
     ])
+
+    def __str__(self):
+        return self.first_name
 
     class Meta:
         db_table = 'customers'

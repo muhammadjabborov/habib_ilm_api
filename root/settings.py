@@ -128,6 +128,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+
+REST_FRAMEWORK = {
+    'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
+}
+
 LOGIN_URL = '/admin/login/?next=/admin/'
 
 STATIC_URL = '/static/'

@@ -2,7 +2,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField, ImageField
 from rest_framework.serializers import ModelSerializer
 
-from apps.user.models import CourseCategory
+from apps.user.models import CourseCategory, Course, Teacher
 
 
 class CourseCategoryModelSerializer(ModelSerializer):
@@ -48,3 +48,47 @@ class RetrieveCourseCategoryModelSerializer(ModelSerializer):
     class Meta:
         model = CourseCategory
         exclude = ('created_at', 'updated_at')
+
+
+class TeacherModelSerializer(ModelSerializer):
+    class Meta:
+        model = Teacher
+        exclude = ()
+
+
+class ListTeacherModelSerializer(ModelSerializer):
+    direction = CourseCategoryModelSerializer(read_only=True)
+
+    class Meta:
+        model = Teacher
+        fields = ('id', 'first_name', 'last_name', 'image', 'direction')
+
+
+class CreateTeacherModelSerializer(ModelSerializer):
+    direction = CourseCategoryModelSerializer(read_only=True)
+
+    class Meta:
+        model = Teacher
+        exclude = ('created_at', 'updated_at')
+
+
+class UpdateTeacherModelSerializer(ModelSerializer):
+    class Meta:
+        model = Teacher
+        exclude = ('created_at', 'updated_at')
+
+
+class RetrieveTeacherModelSerializer(ModelSerializer):
+    direction = CourseCategoryModelSerializer(read_only=True)
+
+    class Meta:
+        model = Teacher
+        fields = ('id', 'image', 'rating', 'first_name', 'last_name', 'direction', 'description', 'url_video')
+
+# class ListCourseModelSerializer(ModelSerializer):
+#
+#     def to_representation(self, instance):
+#         represent = super().to_representation(instance)
+#         represent['']
+#         represent['category'] = CourseCategoryModelSerializer(instance.category).data
+#         return represent

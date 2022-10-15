@@ -17,6 +17,9 @@ class CourseCategory(BaseModel):
 
         super().save(force_insert, force_update, using, update_fields)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = 'categories'
 

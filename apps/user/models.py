@@ -67,6 +67,7 @@ class Course(BaseModel):
 
 class Student(BaseModel):
     full_name = CharField(max_length=255)
+    image = ImageField(upload_to='icons/')
     course = ForeignKey(CourseCategory, on_delete=PROTECT)
     description = CharField(max_length=522)
 

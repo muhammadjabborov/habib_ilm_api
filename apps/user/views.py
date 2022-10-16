@@ -1,17 +1,20 @@
+from django.http import Http404
 from rest_framework import status
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 
-from apps.user.models import CourseCategory, Course, Teacher
+from apps.user.models import CourseCategory, Course, Teacher, Student
 from apps.user.serializers import CourseCategoryModelSerializer, ListCourseCategoryModelSerializer, \
     CreateCourseCategoryModelSerializer, RetrieveCourseCategoryModelSerializer, UpdateCourseCategoryModelSerializer, \
     TeacherModelSerializer, ListTeacherModelSerializer, CreateTeacherModelSerializer, RetrieveTeacherModelSerializer, \
-    UpdateTeacherModelSerializer, CourseModelSerializer, ListCourseModelSerializer, CreateCourseModelSerializer
+    UpdateTeacherModelSerializer, CourseModelSerializer, ListCourseModelSerializer, CreateCourseModelSerializer, \
+    ListStudentModelSerializer, CreateStudentModelSerializer, RetrieveStudentModelSerializer, \
+    UpdateStudentModelSerializer, StudentModelSerializer, UpdateCourseModelSerializer, RetrieveCourseModelSerializer
 
 
 class CourseCategoryModelViewSet(ModelViewSet):
@@ -34,7 +37,7 @@ class CourseCategoryModelViewSet(ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['update', 'partial_update', 'destroy', 'create']:
-            self.permission_classes = [IsAuthenticated]
+            self.permission_classes = [IsAdminUser]
         else:
             self.permission_classes = [AllowAny]
 
@@ -62,28 +65,56 @@ class TeacherModelViewSet(ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'delete']:
-            self.permission_classes = [IsAuthenticated]
+            self.permission_classes = [IsAdminUser]
         else:
             self.permission_classes = [AllowAny]
 
         return super(self.__class__, self).get_permissions()
 
 
-class CourseAPIView(GenericAPIView):
-    queryset = Course.objects.all().order_by('created_at')
+class CourseModelViewSet(ModelViewSet):
+    queryset = Course.objects.all().order_by('-created_at')
     serializer_class = CourseModelSerializer
     permission_classes = [AllowAny]
     lookup_url_kwarg = 'id'
     parser_classes = [MultiPartParser]
 
-    def get(self, request, format=None):
-        courses = Course.objects.all()
-        serializer = ListCourseModelSerializer(courses, many=True)
-        return Response(serializer.data)
+    def get_serializer_class(self):
+        serializer_dict = {
+            'list': ListCourseModelSerializer,
+            'create': CreateCourseModelSerializer,
+            'update': UpdateCourseModelSerializer,
+            'retrieve': RetrieveCourseModelSerializer
+        }
+        return serializer_dict.get(self.action, self.serializer_class)
 
-    def post(self, request, format=None):
-        serializer = CreateCourseModelSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'delete', 'partial_update']:
+            self.permission_classes = [IsAdminUser]
+        else:
+            self.permission_classes = [AllowAny]
+        return super(self.__class__, self).get_permissions()
+
+
+class StudentModelViewSet(ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentModelSerializer
+    permission_classes = [AllowAny]
+    parser_classes = [MultiPartParser]
+    lookup_url_kwarg = 'id'
+
+    def get_serializer_class(self):
+        serializer_dict = {
+            'list': ListStudentModelSerializer,
+            'create': CreateStudentModelSerializer,
+            'update': UpdateStudentModelSerializer,
+            'retrieve': RetrieveStudentModelSerializer
+        }
+        return serializer_dict.get(self.action, self.serializer_class)
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'delete', 'partial_update']:
+            self.permission_classes = [IsAdminUser]
+        else:
+            self.permission_classes = [AllowAny]
+        return super(self.__class__, self).get_permissions()

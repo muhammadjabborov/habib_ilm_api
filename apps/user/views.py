@@ -8,13 +8,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 
-from apps.user.models import CourseCategory, Course, Teacher, Student
+from apps.user.models import CourseCategory, Course, Teacher, Student, CourseNew, CourseComplain
 from apps.user.serializers import CourseCategoryModelSerializer, ListCourseCategoryModelSerializer, \
     CreateCourseCategoryModelSerializer, RetrieveCourseCategoryModelSerializer, UpdateCourseCategoryModelSerializer, \
     TeacherModelSerializer, ListTeacherModelSerializer, CreateTeacherModelSerializer, RetrieveTeacherModelSerializer, \
     UpdateTeacherModelSerializer, CourseModelSerializer, ListCourseModelSerializer, CreateCourseModelSerializer, \
     ListStudentModelSerializer, CreateStudentModelSerializer, RetrieveStudentModelSerializer, \
-    UpdateStudentModelSerializer, StudentModelSerializer, UpdateCourseModelSerializer, RetrieveCourseModelSerializer
+    UpdateStudentModelSerializer, StudentModelSerializer, UpdateCourseModelSerializer, RetrieveCourseModelSerializer, \
+    CourseNewModelSerializer, HeadCourseNewModelSerializer, CourseComplainModelSerializer, \
+    CreateCourseComplainModelSerializer, UpdateCourseComplainModelSerializer
 
 
 class CourseCategoryModelViewSet(ModelViewSet):
@@ -117,4 +119,51 @@ class StudentModelViewSet(ModelViewSet):
             self.permission_classes = [IsAdminUser]
         else:
             self.permission_classes = [AllowAny]
+        return super(self.__class__, self).get_permissions()
+
+
+class CourseNewModelViewSet(ModelViewSet):
+    queryset = CourseNew.objects.all().order_by('-created_at')
+    serializer_class = CourseNewModelSerializer
+    permission_classes = [AllowAny]
+    parser_classes = [MultiPartParser]
+    lookup_url_kwarg = 'id'
+
+    def get_serializer_class(self):
+        serializer_dict = {
+            'create': HeadCourseNewModelSerializer,
+            'update': HeadCourseNewModelSerializer
+        }
+        return serializer_dict.get(self.action, self.serializer_class)
+
+    def get_permissions(self):
+        if self.action in ['update', 'create', 'partial_update', 'delete']:
+            self.permission_classes = [IsAdminUser]
+
+        else:
+            self.permission_classes = [AllowAny]
+
+        return super(self.__class__, self).get_permissions()
+
+
+class CourseComplainModelViewSet(ModelViewSet):
+    queryset = CourseComplain.objects.all().order_by('-created_at')
+    serializer_class = CourseComplainModelSerializer
+    permission_classes = [AllowAny]
+    lookup_url_kwarg = 'id'
+
+    def get_serializer_class(self):
+        serializer_dict = {
+            'create': CreateCourseComplainModelSerializer,
+            'update': UpdateCourseComplainModelSerializer,
+        }
+        return serializer_dict.get(self.action, self.serializer_class)
+
+    def get_permissions(self):
+        if self.action in ['update', 'create', 'partial_update', 'delete']:
+            self.permission_classes = [IsAdminUser]
+
+        else:
+            self.permission_classes = [AllowAny]
+
         return super(self.__class__, self).get_permissions()

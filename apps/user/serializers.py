@@ -2,7 +2,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField, ImageField
 from rest_framework.serializers import ModelSerializer
 
-from apps.user.models import CourseCategory, Course, Teacher, Student
+from apps.user.models import CourseCategory, Course, Teacher, Student, CourseNew, CourseComplain
 
 
 class CourseCategoryModelSerializer(ModelSerializer):
@@ -153,10 +153,49 @@ class RetrieveStudentModelSerializer(ModelSerializer):
 class CreateStudentModelSerializer(ModelSerializer):
     class Meta:
         model = Student
-        fields = ('id', 'image', 'course', 'description')
+        fields = ('id', 'full_name', 'image', 'course', 'description')
 
 
 class UpdateStudentModelSerializer(ModelSerializer):
     class Meta:
         model = Student
+        exclude = ('created_at', 'updated_at')
+
+
+class CourseNewModelSerializer(ModelSerializer):
+    class Meta:
+        model = CourseNew
+        exclude = ()
+
+
+class HeadCourseNewModelSerializer(ModelSerializer):
+    class Meta:
+        model = CourseNew
+        exclude = ('created_at', 'updated_at')
+
+
+class CreateCourseComplainModelSerializer(ModelSerializer):
+
+    def validate(self, data):
+        if CourseComplain.objects.filter(phone_number=data['phone_number']).exists():
+            raise ValidationError('This phone number already exists')
+        if data['phone_number'] is None:
+            raise ValidationError('The phone number can not be none')
+
+        return data
+
+    class Meta:
+        model = CourseComplain
+        fields = ('id', 'first_name', 'phone_number', 'description')
+
+
+class CourseComplainModelSerializer(ModelSerializer):
+    class Meta:
+        model = CourseComplain
+        fields = '__all__'
+
+
+class UpdateCourseComplainModelSerializer(ModelSerializer):
+    class Meta:
+        model = CourseComplain
         exclude = ('created_at', 'updated_at')

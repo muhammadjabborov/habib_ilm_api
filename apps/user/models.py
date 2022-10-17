@@ -1,6 +1,6 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.db.models import CharField, SlugField, ImageField, ForeignKey, CASCADE, PROTECT, FloatField, IntegerField
+from django.db.models import CharField, SlugField, ImageField, ForeignKey, CASCADE, CASCADE, FloatField, IntegerField
 from django.utils.text import slugify
 
 from apps.shared.models import BaseModel
@@ -26,7 +26,7 @@ class CourseCategory(BaseModel):
 
 class Teacher(BaseModel):
     full_name = CharField(max_length=255)
-    direction = ForeignKey(CourseCategory, on_delete=PROTECT)
+    direction = ForeignKey(CourseCategory, on_delete=CASCADE)
     image = ImageField(upload_to='icons/')
     rating = FloatField(
         validators=[
@@ -45,7 +45,7 @@ class Teacher(BaseModel):
 
 
 class Course(BaseModel):
-    full_name = ForeignKey(Teacher, on_delete=PROTECT)
+    full_name = ForeignKey(Teacher, on_delete=CASCADE)
     image = ImageField(upload_to='icons/')
     title = CharField(max_length=255)
     duration = IntegerField()
@@ -56,7 +56,7 @@ class Course(BaseModel):
         ]
     )
     description = CharField(max_length=522)
-    category = ForeignKey(CourseCategory, on_delete=PROTECT)
+    category = ForeignKey(CourseCategory, on_delete=CASCADE)
 
     def __str__(self):
         return self.title
@@ -68,7 +68,7 @@ class Course(BaseModel):
 class Student(BaseModel):
     full_name = CharField(max_length=255)
     image = ImageField(upload_to='icons/')
-    course = ForeignKey(CourseCategory, on_delete=PROTECT)
+    course = ForeignKey(CourseCategory, on_delete=CASCADE)
     description = CharField(max_length=522)
 
     def __str__(self):
@@ -92,9 +92,7 @@ class CourseNew(BaseModel):
 
 class CourseComplain(BaseModel):
     first_name = CharField(max_length=255)
-    phone_number = CharField(max_length=9, validators=[
-        MaxValueValidator(9, 'Should be 9')
-    ])
+    phone_number = CharField(max_length=9)
     description = CharField(max_length=522)
 
     def __str__(self):
@@ -105,11 +103,9 @@ class CourseComplain(BaseModel):
 
 
 class Customer(BaseModel):
-    course = ForeignKey(CourseCategory, on_delete=PROTECT)
+    course = ForeignKey(CourseCategory, on_delete=CASCADE)
     first_name = CharField(max_length=255)
-    phone_number = CharField(max_length=9, validators=[
-        MaxValueValidator(9, 'Should be 9')
-    ])
+    phone_number = CharField(max_length=9)
 
     def __str__(self):
         return self.first_name

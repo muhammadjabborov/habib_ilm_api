@@ -113,5 +113,3 @@ class Customer(BaseModel):
     class Meta:
         db_table = 'customers'
 
-# and here too
-# i should add status

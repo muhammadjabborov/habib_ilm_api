@@ -167,3 +167,5 @@ class CourseComplainModelViewSet(ModelViewSet):
             self.permission_classes = [AllowAny]
 
         return super(self.__class__, self).get_permissions()
+
+# tomorow i should write a new sutomer page and start admin page for study

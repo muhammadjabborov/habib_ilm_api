@@ -1,4 +1,5 @@
 from django.http import Http404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import GenericAPIView
@@ -7,16 +8,16 @@ from rest_framework.permissions import AllowAny, IsAdminUser, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
-
 from apps.user.models import CourseCategory, Course, Teacher, Student, CourseNew, CourseComplain
 from apps.user.serializers import CourseCategoryModelSerializer, ListCourseCategoryModelSerializer, \
-    CreateCourseCategoryModelSerializer, RetrieveCourseCategoryModelSerializer, UpdateCourseCategoryModelSerializer, \
     TeacherModelSerializer, ListTeacherModelSerializer, CreateTeacherModelSerializer, RetrieveTeacherModelSerializer, \
     UpdateTeacherModelSerializer, CourseModelSerializer, ListCourseModelSerializer, CreateCourseModelSerializer, \
     ListStudentModelSerializer, CreateStudentModelSerializer, RetrieveStudentModelSerializer, \
     UpdateStudentModelSerializer, StudentModelSerializer, UpdateCourseModelSerializer, RetrieveCourseModelSerializer, \
     CourseNewModelSerializer, HeadCourseNewModelSerializer, CourseComplainModelSerializer, \
     CreateCourseComplainModelSerializer, UpdateCourseComplainModelSerializer
+from apps.user.serializers import CreateCourseCategoryModelSerializer, RetrieveCourseCategoryModelSerializer, \
+    UpdateCourseCategoryModelSerializer
 
 
 class CourseCategoryModelViewSet(ModelViewSet):
@@ -78,6 +79,7 @@ class CourseModelViewSet(ModelViewSet):
     queryset = Course.objects.all().order_by('-created_at')
     serializer_class = CourseModelSerializer
     permission_classes = [AllowAny]
+    filter_backends = [SearchFilter]
     lookup_url_kwarg = 'id'
     parser_classes = [MultiPartParser]
 
@@ -104,6 +106,8 @@ class StudentModelViewSet(ModelViewSet):
     permission_classes = [AllowAny]
     parser_classes = [MultiPartParser]
     lookup_url_kwarg = 'id'
+    search_fields = ['id', 'title', 'description']
+    filter_backends = [SearchFilter]
 
     def get_serializer_class(self):
         serializer_dict = {
@@ -128,6 +132,8 @@ class CourseNewModelViewSet(ModelViewSet):
     permission_classes = [AllowAny]
     parser_classes = [MultiPartParser]
     lookup_url_kwarg = 'id'
+    search_fields = ['id', 'title', 'description']
+    filter_backends = [SearchFilter]
 
     def get_serializer_class(self):
         serializer_dict = {
@@ -151,6 +157,8 @@ class CourseComplainModelViewSet(ModelViewSet):
     serializer_class = CourseComplainModelSerializer
     permission_classes = [AllowAny]
     lookup_url_kwarg = 'id'
+    search_fields = ['id', 'first_name', 'phone_number']
+    filter_backends = [SearchFilter]
 
     def get_serializer_class(self):
         serializer_dict = {

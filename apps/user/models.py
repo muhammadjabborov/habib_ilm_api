@@ -1,6 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.db.models import CharField, SlugField, ImageField, ForeignKey, CASCADE, CASCADE, FloatField, IntegerField
+from django.db.models import CharField, SlugField, ImageField, ForeignKey, CASCADE, CASCADE, FloatField, IntegerField, \
+    TextChoices
 from django.utils.text import slugify
 
 from apps.shared.models import BaseModel
@@ -92,7 +93,7 @@ class CourseNew(BaseModel):
 
 class CourseComplain(BaseModel):
     first_name = CharField(max_length=255)
-    phone_number = CharField(max_length=9)
+    phone_number = CharField(max_length=25)
     description = CharField(max_length=522)
 
     def __str__(self):
@@ -103,13 +104,16 @@ class CourseComplain(BaseModel):
 
 
 class Customer(BaseModel):
+    class Status(TextChoices):
+        INACTIVE = "Kutilyapti"
+        ACTIVE = "Qabul qilindi"
+        REJECT = "Qabdul qilinmadi"
+        POSTPONED = "Keyinroqqa qo'yildi"
+
     course = ForeignKey(CourseCategory, on_delete=CASCADE)
     first_name = CharField(max_length=255)
     phone_number = CharField(max_length=9)
-
-    def __str__(self):
-        return self.first_name
+    status = CharField(max_length=25, choices=Status.choices, default=Status.INACTIVE)
 
     class Meta:
         db_table = 'customers'
-

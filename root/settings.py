@@ -131,6 +131,9 @@ USE_TZ = True
 
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
+    # {
+    #     'multitude':'for -multitude'
+    # }
 }
 
 LOGIN_URL = '/admin/login/?next=/admin/'

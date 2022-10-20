@@ -3,7 +3,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from root import settings
 from apps.user.views import CourseCategoryModelViewSet, TeacherModelViewSet, \
-    StudentModelViewSet, CourseModelViewSet, CourseNewModelViewSet, CourseComplainModelViewSet
+    StudentModelViewSet, CourseModelViewSet, CourseNewModelViewSet, CourseComplainModelViewSet, CustomerModelViewSet
 
 router = DefaultRouter()
 router.register('course-category', CourseCategoryModelViewSet)
@@ -12,6 +12,7 @@ router.register('student', StudentModelViewSet)
 router.register('course', CourseModelViewSet)
 router.register('course-new', CourseNewModelViewSet)
 router.register('course-complain', CourseComplainModelViewSet)
+router.register('customer',CustomerModelViewSet)
 
 urlpatterns = [
     path('', include(router.urls))

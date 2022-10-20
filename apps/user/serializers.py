@@ -2,7 +2,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField, ImageField
 from rest_framework.serializers import ModelSerializer
 
-from apps.user.models import CourseCategory, Course, Teacher, Student, CourseNew, CourseComplain
+from apps.user.models import CourseCategory, Course, Teacher, Student, CourseNew, CourseComplain, Customer
 
 
 class CourseCategoryModelSerializer(ModelSerializer):
@@ -17,6 +17,7 @@ class CreateCourseCategoryModelSerializer(ModelSerializer):
     def validate(self, data):
         if CourseCategory.objects.filter(name=data['name']).exists():
             raise ValidationError('This name already taken')
+
         return data
 
     class Meta:
@@ -182,6 +183,9 @@ class CreateCourseComplainModelSerializer(ModelSerializer):
         if data['phone_number'] is None:
             raise ValidationError('The phone number can not be none')
 
+        if len(data['phone_number']) > 9:
+            raise ValidationError('The phone number should be 9 numbers')
+
         return data
 
     class Meta:
@@ -195,10 +199,41 @@ class CourseComplainModelSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class UpdateCourseComplainModelSerializer(ModelSerializer):
+class CustomerModelSerializer(ModelSerializer):
+    course = CourseModelSerializer(read_only=True)
+
     class Meta:
-        model = CourseComplain
-        exclude = ('created_at', 'updated_at')
+        model = Customer
+        fields = '__all__'
 
 
+class CreateCustomerModelSerializer(ModelSerializer):
 
+    def validate(self, data):
+        if Customer.objects.filter(phone_number=data['phone_number']).exists():
+            raise ValidationError('This phone_number already exists')
+
+        if len(data['phone_number']) > 9:
+            raise ValidationError('The phone number should be 9 numbers')
+
+        return data
+
+    class Meta:
+        model = Customer
+        fields = ('id', 'course', 'first_name', 'phone_number')
+
+
+class UpdateCustomerModelSerializer(ModelSerializer):
+
+    def validate(self, data):
+        if Customer.objects.filter(phone_number=data['phone_number']).exists():
+            raise ValidationError('This phone_number already exists')
+
+        if len(data['phone_number']) > 9:
+            raise ValidationError('The phone number should be 9 numbers')
+
+        return data
+
+    class Meta:
+        model = Customer
+        fields = ('id', 'course', 'first_name', 'phone_number', 'status')

@@ -13,6 +13,9 @@ class CourseCategoryModelSerializer(ModelSerializer):
 
 class CreateCourseCategoryModelSerializer(ModelSerializer):
     name = CharField()
+    """
+    Create Course Category
+    """
 
     def validate(self, data):
         if CourseCategory.objects.filter(name=data['name']).exists():
@@ -26,12 +29,21 @@ class CreateCourseCategoryModelSerializer(ModelSerializer):
 
 
 class ListCourseCategoryModelSerializer(ModelSerializer):
+    """
+    List GET all categories
+    """
+
     class Meta:
         model = CourseCategory
         fields = '__all__'
 
 
 class UpdateCourseCategoryModelSerializer(ModelSerializer):
+    """
+
+    Update CATEGORY
+
+    """
 
     def validate(self, data):
         if CourseCategory.objects.filter(name=data['name']).exists():
@@ -44,12 +56,24 @@ class UpdateCourseCategoryModelSerializer(ModelSerializer):
 
 
 class RetrieveCourseCategoryModelSerializer(ModelSerializer):
+    """
+    Get obj/{id} category
+
+    """
+
     class Meta:
         model = CourseCategory
         exclude = ('created_at', 'updated_at')
 
 
 class TeacherModelSerializer(ModelSerializer):
+    """
+
+    Teacher Serializer
+
+
+    """
+
     class Meta:
         model = Teacher
         exclude = ()
@@ -58,6 +82,10 @@ class TeacherModelSerializer(ModelSerializer):
 class ListTeacherModelSerializer(ModelSerializer):
     direction = CourseCategoryModelSerializer(read_only=True)
 
+    """
+    List all Teachers GET
+    """
+
     class Meta:
         model = Teacher
         fields = ('id', 'full_name', 'image', 'direction')
@@ -65,6 +93,9 @@ class ListTeacherModelSerializer(ModelSerializer):
 
 class CreateTeacherModelSerializer(ModelSerializer):
     direction = CourseCategoryModelSerializer(read_only=True)
+    """
+     Create Teacher POST
+    """
 
     class Meta:
         model = Teacher
@@ -72,6 +103,12 @@ class CreateTeacherModelSerializer(ModelSerializer):
 
 
 class UpdateTeacherModelSerializer(ModelSerializer):
+    """
+
+    Update Teacher obj/{id}  PUT/PATCH
+
+    """
+
     class Meta:
         model = Teacher
         exclude = ('created_at', 'updated_at')
@@ -80,18 +117,33 @@ class UpdateTeacherModelSerializer(ModelSerializer):
 class RetrieveTeacherModelSerializer(ModelSerializer):
     direction = CourseCategoryModelSerializer(read_only=True)
 
+    """
+        GET ONE TEACHER obj/{id} RETRIEVE
+    """
+
     class Meta:
         model = Teacher
         fields = ('id', 'image', 'rating', 'full_name', 'direction', 'description', 'url_video')
 
 
 class CourseModelSerializer(ModelSerializer):
+
+    """
+       COURSE MODEL SERIALIZER
+    """
+
     class Meta:
         model = Course
         fields = '__all__'
 
 
 class ListCourseModelSerializer(ModelSerializer):
+
+    """
+
+    LIST ALL COURSES GET
+
+    """
 
     def to_representation(self, instance):
         represent = super().to_representation(instance)
@@ -105,18 +157,29 @@ class ListCourseModelSerializer(ModelSerializer):
 
 
 class CreateCourseModelSerializer(ModelSerializer):
+
+    """
+    Create COURSE POST
+    """
     class Meta:
         model = Course
         exclude = ('created_at', 'updated_at')
 
 
 class UpdateCourseModelSerializer(ModelSerializer):
+    """
+    Update Course obj/{id} PUT/PATCH
+    """
     class Meta:
         model = Course
         exclude = ('created_at', 'updated_at')
 
 
 class RetrieveCourseModelSerializer(ModelSerializer):
+    """
+    GET obj/{id} Retrieve
+
+    """
     class Meta:
         model = Course
         fields = '__all__'

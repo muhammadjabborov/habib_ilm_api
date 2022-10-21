@@ -130,14 +130,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "https://habib-ilm-markazi.netlify.app/",
-    "https://futurecommunication.pythonanywhere.com/"
-]
+# CORS_ORIGIN_WHITELIST = [
+#     "http://localhost:3000",
+#     "http://localhost:3001",
+#     "https://habib-ilm-markazi.netlify.app/",
+#     "https://futurecommunication.pythonanywhere.com/"
+# ]
 
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',

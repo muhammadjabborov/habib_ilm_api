@@ -6,7 +6,5 @@ class CourseCategoryPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 3
 
-# and add some paginations
 
-# write some data
-# and every pagination should 10
+# write just some data

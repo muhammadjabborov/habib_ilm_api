@@ -27,7 +27,7 @@ class CourseDetailsModelViewSet(ModelViewSet):
     queryset = CourseDetails.objects.all().order_by('-created_at')
     permission_classes = [AllowAny]
     serializer_class = CourseDetailsModelSerializer
-    lookup_url_kwarg = 'id'
+    lookup_field = 'slug'
     pagination_class = CourseDetailsPagination
     parser_classes = [MultiPartParser]
     search_fields = ['id', 'name']

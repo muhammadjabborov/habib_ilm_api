@@ -9,9 +9,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 
-from apps.shared.pagination import CourseCategoryPagination
-from apps.user.models import CourseCategory, Course, Teacher, Student, CourseNew, CourseComplain, Customer
-from apps.user.serializers import CourseCategoryModelSerializer, ListCourseCategoryModelSerializer, \
+from apps.shared.pagination import CourseDetailsPagination
+from apps.user.models import CourseDetails, Course, Teacher, Student, CourseNew, CourseComplain, Customer
+from apps.user.serializers import CourseDetailsModelSerializer, ListCourseDetailsModelSerializer, \
     TeacherModelSerializer, ListTeacherModelSerializer, CreateTeacherModelSerializer, RetrieveTeacherModelSerializer, \
     UpdateTeacherModelSerializer, CourseModelSerializer, ListCourseModelSerializer, CreateCourseModelSerializer, \
     ListStudentModelSerializer, CreateStudentModelSerializer, RetrieveStudentModelSerializer, \
@@ -19,26 +19,26 @@ from apps.user.serializers import CourseCategoryModelSerializer, ListCourseCateg
     CourseNewModelSerializer, HeadCourseNewModelSerializer, CourseComplainModelSerializer, \
     CreateCourseComplainModelSerializer, CustomerModelSerializer, CreateCustomerModelSerializer, \
     UpdateCustomerModelSerializer
-from apps.user.serializers import CreateCourseCategoryModelSerializer, RetrieveCourseCategoryModelSerializer, \
-    UpdateCourseCategoryModelSerializer
+from apps.user.serializers import CreateCourseDetailsModelSerializer, RetrieveCourseDetailsModelSerializer, \
+    UpdateCourseDetailsModelSerializer
 
 
-class CourseCategoryModelViewSet(ModelViewSet):
-    queryset = CourseCategory.objects.all().order_by('-created_at')
+class CourseDetailsModelViewSet(ModelViewSet):
+    queryset = CourseDetails.objects.all().order_by('-created_at')
     permission_classes = [AllowAny]
-    serializer_class = CourseCategoryModelSerializer
+    serializer_class = CourseDetailsModelSerializer
     lookup_url_kwarg = 'id'
-    pagination_class = CourseCategoryPagination
+    pagination_class = CourseDetailsPagination
     parser_classes = [MultiPartParser]
     search_fields = ['id', 'name']
     filter_backends = [SearchFilter]
 
     def get_serializer_class(self):
         serializer_dict = {
-            'list': ListCourseCategoryModelSerializer,
-            'create': CreateCourseCategoryModelSerializer,
-            'retrieve': RetrieveCourseCategoryModelSerializer,
-            'update': UpdateCourseCategoryModelSerializer,
+            'list': ListCourseDetailsModelSerializer,
+            'create': CreateCourseDetailsModelSerializer,
+            'retrieve': RetrieveCourseDetailsModelSerializer,
+            'update': UpdateCourseDetailsModelSerializer,
         }
         return serializer_dict.get(self.action, self.serializer_class)
 

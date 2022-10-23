@@ -2,11 +2,11 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from root import settings
-from apps.user.views import CourseCategoryModelViewSet, TeacherModelViewSet, \
+from apps.user.views import CourseDetailsModelViewSet, TeacherModelViewSet, \
     StudentModelViewSet, CourseModelViewSet, CourseNewModelViewSet, CourseComplainModelViewSet, CustomerModelViewSet
 
 router = DefaultRouter()
-router.register('course-category', CourseCategoryModelViewSet)
+router.register('course-details', CourseDetailsModelViewSet)
 router.register('teacher', TeacherModelViewSet)
 router.register('student', StudentModelViewSet)
 router.register('course', CourseModelViewSet)

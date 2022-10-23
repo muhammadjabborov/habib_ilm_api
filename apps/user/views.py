@@ -63,7 +63,7 @@ class TeacherModelViewSet(ModelViewSet):
     def get_serializer_class(self):
         serializer_dict = {
             'list': ListTeacherModelSerializer,
-            'create': CreateTeacherModelSerializer,
+            'create': TeacherModelSerializer,
             'retrieve': RetrieveTeacherModelSerializer,
             'update': UpdateTeacherModelSerializer
         }
@@ -202,4 +202,3 @@ class CustomerModelViewSet(ModelViewSet):
         else:
             self.permission_classes = [IsAuthenticated]
         return super(self.__class__, self).get_permissions()
-

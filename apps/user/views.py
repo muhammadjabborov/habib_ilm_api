@@ -8,6 +8,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
+
+from apps.shared.pagination import CourseCategoryPagination
 from apps.user.models import CourseCategory, Course, Teacher, Student, CourseNew, CourseComplain, Customer
 from apps.user.serializers import CourseCategoryModelSerializer, ListCourseCategoryModelSerializer, \
     TeacherModelSerializer, ListTeacherModelSerializer, CreateTeacherModelSerializer, RetrieveTeacherModelSerializer, \
@@ -26,6 +28,7 @@ class CourseCategoryModelViewSet(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = CourseCategoryModelSerializer
     lookup_url_kwarg = 'id'
+    pagination_class = CourseCategoryPagination
     parser_classes = [MultiPartParser]
     search_fields = ['id', 'name']
     filter_backends = [SearchFilter]

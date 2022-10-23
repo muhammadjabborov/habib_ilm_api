@@ -7,7 +7,7 @@ from django.utils.text import slugify
 from apps.shared.models import BaseModel
 
 
-class CourseCategory(BaseModel):
+class CourseDetails(BaseModel):
     name = CharField(max_length=255)
     slug = SlugField()
     photo = ImageField(upload_to='icons/')
@@ -27,7 +27,7 @@ class CourseCategory(BaseModel):
 
 class Teacher(BaseModel):
     full_name = CharField(max_length=255)
-    direction = ForeignKey(CourseCategory, on_delete=CASCADE)
+    direction = ForeignKey(CourseDetails, on_delete=CASCADE)
     image = ImageField(upload_to='icons/')
     rating = FloatField(
         validators=[
@@ -57,7 +57,7 @@ class Course(BaseModel):
         ]
     )
     description = CharField(max_length=522)
-    category = ForeignKey(CourseCategory, on_delete=CASCADE)
+    category = ForeignKey(CourseDetails, on_delete=CASCADE)
 
     def __str__(self):
         return self.title
@@ -69,7 +69,7 @@ class Course(BaseModel):
 class Student(BaseModel):
     full_name = CharField(max_length=255)
     image = ImageField(upload_to='icons/')
-    course = ForeignKey(CourseCategory, on_delete=CASCADE)
+    course = ForeignKey(CourseDetails, on_delete=CASCADE)
     description = CharField(max_length=522)
 
     def __str__(self):
@@ -110,7 +110,7 @@ class Customer(BaseModel):
         REJECT = "Qabdul qilinmadi"
         POSTPONED = "Keyinroqqa qo'yildi"
 
-    course = ForeignKey(CourseCategory, on_delete=CASCADE)
+    course = ForeignKey(CourseDetails, on_delete=CASCADE)
     first_name = CharField(max_length=255)
     phone_number = CharField(max_length=9)
     status = CharField(max_length=25, choices=Status.choices, default=Status.INACTIVE)

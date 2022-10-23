@@ -137,7 +137,7 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
     "http://localhost:3001",
     "https://habib-ilm-markazi.netlify.app/",
-    "https://futurecommunication.pythonanywhere.com/"
+    "https://udontnow.pythonanywhere.com/"
 ]
 
 REST_FRAMEWORK = {

@@ -11,7 +11,6 @@ class CourseCategoryModelSerializer(ModelSerializer):
         fields = '__all__'
 
 
-
 # i should do update
 
 class CreateCourseCategoryModelSerializer(ModelSerializer):

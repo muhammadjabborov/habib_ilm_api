@@ -2,43 +2,46 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField, ImageField
 from rest_framework.serializers import ModelSerializer
 
-from apps.user.models import CourseDetails, Course, Teacher, Student, CourseNew, CourseComplain, Customer
+from apps.user.models import CourseCategory, Course, Teacher, Student, CourseNew, CourseComplain, Customer
 
 
-class CourseDetailsModelSerializer(ModelSerializer):
+class CourseCategoryModelSerializer(ModelSerializer):
     class Meta:
-        model = CourseDetails
+        model = CourseCategory
         fields = '__all__'
 
 
-class CreateCourseDetailsModelSerializer(ModelSerializer):
+
+# i should do update
+
+class CreateCourseCategoryModelSerializer(ModelSerializer):
     name = CharField()
     """
     Create Course Category
     """
 
     def validate(self, data):
-        if CourseDetails.objects.filter(name=data['name']).exists():
+        if CourseCategory.objects.filter(name=data['name']).exists():
             raise ValidationError('This name already taken')
 
         return data
 
     class Meta:
-        model = CourseDetails
+        model = CourseCategory
         fields = ('id', 'name', 'photo')
 
 
-class ListCourseDetailsModelSerializer(ModelSerializer):
+class ListCourseCategoryModelSerializer(ModelSerializer):
     """
     List GET all categories
     """
 
     class Meta:
-        model = CourseDetails
+        model = CourseCategory
         fields = '__all__'
 
 
-class UpdateCourseDetailsModelSerializer(ModelSerializer):
+class UpdateCourseCategoryModelSerializer(ModelSerializer):
     """
 
     Update CATEGORY
@@ -46,23 +49,23 @@ class UpdateCourseDetailsModelSerializer(ModelSerializer):
     """
 
     def validate(self, data):
-        if CourseDetails.objects.filter(name=data['name']).exists():
+        if CourseCategory.objects.filter(name=data['name']).exists():
             raise ValidationError('This category name already exists')
         return data
 
     class Meta:
-        model = CourseDetails
+        model = CourseCategory
         fields = ('id', 'name', 'photo')
 
 
-class RetrieveCourseDetailsModelSerializer(ModelSerializer):
+class RetrieveCourseCategoryModelSerializer(ModelSerializer):
     """
     Get obj/{id} category
 
     """
 
     class Meta:
-        model = CourseDetails
+        model = CourseCategory
         exclude = ('created_at', 'updated_at')
 
 
@@ -80,7 +83,7 @@ class TeacherModelSerializer(ModelSerializer):
 
 
 class ListTeacherModelSerializer(ModelSerializer):
-    direction = CourseDetailsModelSerializer(read_only=True)
+    direction = CourseCategoryModelSerializer(read_only=True)
 
     """
     List all Teachers GET
@@ -92,7 +95,7 @@ class ListTeacherModelSerializer(ModelSerializer):
 
 
 class CreateTeacherModelSerializer(ModelSerializer):
-    direction = CourseDetailsModelSerializer(read_only=True)
+    direction = CourseCategoryModelSerializer(read_only=True)
     """
      Create Teacher POST
     """
@@ -115,7 +118,7 @@ class UpdateTeacherModelSerializer(ModelSerializer):
 
 
 class RetrieveTeacherModelSerializer(ModelSerializer):
-    direction = CourseDetailsModelSerializer(read_only=True)
+    direction = CourseCategoryModelSerializer(read_only=True)
 
     """
         GET ONE TEACHER obj/{id} RETRIEVE
@@ -127,7 +130,6 @@ class RetrieveTeacherModelSerializer(ModelSerializer):
 
 
 class CourseModelSerializer(ModelSerializer):
-
     """
        COURSE MODEL SERIALIZER
     """
@@ -138,7 +140,6 @@ class CourseModelSerializer(ModelSerializer):
 
 
 class ListCourseModelSerializer(ModelSerializer):
-
     """
 
     LIST ALL COURSES GET
@@ -148,7 +149,7 @@ class ListCourseModelSerializer(ModelSerializer):
     def to_representation(self, instance):
         represent = super().to_representation(instance)
         represent['full_name'] = TeacherModelSerializer(instance.full_name).data
-        represent['category'] = CourseDetailsModelSerializer(instance.category).data
+        represent['category'] = CourseCategoryModelSerializer(instance.category).data
         return represent
 
     class Meta:
@@ -157,10 +158,10 @@ class ListCourseModelSerializer(ModelSerializer):
 
 
 class CreateCourseModelSerializer(ModelSerializer):
-
     """
     Create COURSE POST
     """
+
     class Meta:
         model = Course
         exclude = ('created_at', 'updated_at')
@@ -170,6 +171,7 @@ class UpdateCourseModelSerializer(ModelSerializer):
     """
     Update Course obj/{id} PUT/PATCH
     """
+
     class Meta:
         model = Course
         exclude = ('created_at', 'updated_at')
@@ -180,6 +182,7 @@ class RetrieveCourseModelSerializer(ModelSerializer):
     GET obj/{id} Retrieve
 
     """
+
     class Meta:
         model = Course
         fields = '__all__'
@@ -195,7 +198,7 @@ class ListStudentModelSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         represent = super().to_representation(instance)
-        represent['course'] = CourseDetailsModelSerializer(instance.course).data
+        represent['course'] = CourseCategoryModelSerializer(instance.course).data
         return represent
 
     class Meta:
@@ -206,7 +209,7 @@ class ListStudentModelSerializer(ModelSerializer):
 class RetrieveStudentModelSerializer(ModelSerializer):
     def to_representation(self, instance):
         represent = super().to_representation(instance)
-        represent['course'] = CourseDetailsModelSerializer(instance.course).data
+        represent['course'] = CourseCategoryModelSerializer(instance.course).data
         return represent
 
     class Meta:

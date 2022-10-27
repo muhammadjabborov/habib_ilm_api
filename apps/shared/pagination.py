@@ -1,7 +1,7 @@
 from rest_framework.pagination import PageNumberPagination
 
 
-class CourseDetailsPagination(PageNumberPagination):
+class CourseCategoryPagination(PageNumberPagination):
     page_size = 20
     page_size_query_param = 'page_size'
     max_page_size = 20
@@ -43,10 +43,7 @@ class ComplainPagination(PageNumberPagination):
     max_page_size = 10
 
 
-class NewCoursePagination(PageNumberPagination):
+class CourseNewPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 10
-
-
-

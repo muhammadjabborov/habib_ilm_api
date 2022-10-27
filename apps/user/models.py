@@ -7,14 +7,13 @@ from django.utils.text import slugify
 from apps.shared.models import BaseModel
 
 
-class CourseDetails(BaseModel):
+class CourseCategory(BaseModel):
     name = CharField(max_length=255)
     slug = SlugField()
     photo = ImageField(upload_to='icons/')
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        if not self.slug:
-            self.slug = slugify(self.name)
+        self.slug = slugify(self.name)
         self.name = slugify(self.name)
 
         super().save(force_insert, force_update, using, update_fields)
@@ -28,7 +27,7 @@ class CourseDetails(BaseModel):
 
 class Teacher(BaseModel):
     full_name = CharField(max_length=255)
-    direction = ForeignKey(CourseDetails, on_delete=CASCADE)
+    direction = ForeignKey(CourseCategory, on_delete=CASCADE)
     image = ImageField(upload_to='icons/')
     rating = FloatField(
         validators=[
@@ -58,7 +57,7 @@ class Course(BaseModel):
         ]
     )
     description = CharField(max_length=522)
-    category = ForeignKey(CourseDetails, on_delete=CASCADE)
+    category = ForeignKey(CourseCategory, on_delete=CASCADE)
 
     def __str__(self):
         return self.title
@@ -70,7 +69,7 @@ class Course(BaseModel):
 class Student(BaseModel):
     full_name = CharField(max_length=255)
     image = ImageField(upload_to='icons/')
-    course = ForeignKey(CourseDetails, on_delete=CASCADE)
+    course = ForeignKey(CourseCategory, on_delete=CASCADE)
     description = CharField(max_length=522)
 
     def __str__(self):
@@ -111,7 +110,7 @@ class Customer(BaseModel):
         REJECT = "Qabdul qilinmadi"
         POSTPONED = "Keyinroqqa qo'yildi"
 
-    course = ForeignKey(CourseDetails, on_delete=CASCADE)
+    course = ForeignKey(CourseCategory, on_delete=CASCADE)
     first_name = CharField(max_length=255)
     phone_number = CharField(max_length=9)
     status = CharField(max_length=25, choices=Status.choices, default=Status.INACTIVE)

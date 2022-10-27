@@ -9,9 +9,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 
-from apps.shared.pagination import CourseDetailsPagination
-from apps.user.models import CourseDetails, Course, Teacher, Student, CourseNew, CourseComplain, Customer
-from apps.user.serializers import CourseDetailsModelSerializer, ListCourseDetailsModelSerializer, \
+from apps.shared.pagination import CourseCategoryPagination, TeacherPagination, CoursePagination, StudentPagination, \
+    CourseNewPagination, ComplainPagination, CustomerPagination
+from apps.user.models import CourseCategory, Course, Teacher, Student, CourseNew, CourseComplain, Customer
+from apps.user.serializers import CourseCategoryModelSerializer, ListCourseCategoryModelSerializer, \
     TeacherModelSerializer, ListTeacherModelSerializer, CreateTeacherModelSerializer, RetrieveTeacherModelSerializer, \
     UpdateTeacherModelSerializer, CourseModelSerializer, ListCourseModelSerializer, CreateCourseModelSerializer, \
     ListStudentModelSerializer, CreateStudentModelSerializer, RetrieveStudentModelSerializer, \
@@ -19,26 +20,26 @@ from apps.user.serializers import CourseDetailsModelSerializer, ListCourseDetail
     CourseNewModelSerializer, HeadCourseNewModelSerializer, CourseComplainModelSerializer, \
     CreateCourseComplainModelSerializer, CustomerModelSerializer, CreateCustomerModelSerializer, \
     UpdateCustomerModelSerializer
-from apps.user.serializers import CreateCourseDetailsModelSerializer, RetrieveCourseDetailsModelSerializer, \
-    UpdateCourseDetailsModelSerializer
+from apps.user.serializers import CreateCourseCategoryModelSerializer, RetrieveCourseCategoryModelSerializer, \
+    UpdateCourseCategoryModelSerializer
 
 
-class CourseDetailsModelViewSet(ModelViewSet):
-    queryset = CourseDetails.objects.all().order_by('-created_at')
+class CourseCategoryModelViewSet(ModelViewSet):
+    queryset = CourseCategory.objects.all().order_by('-created_at')
     permission_classes = [AllowAny]
-    serializer_class = CourseDetailsModelSerializer
+    serializer_class = CourseCategoryModelSerializer
     lookup_field = 'slug'
-    pagination_class = CourseDetailsPagination
+    pagination_class = CourseCategoryPagination
     parser_classes = [MultiPartParser]
     search_fields = ['id', 'name']
     filter_backends = [SearchFilter]
 
     def get_serializer_class(self):
         serializer_dict = {
-            'list': ListCourseDetailsModelSerializer,
-            'create': CreateCourseDetailsModelSerializer,
-            'retrieve': RetrieveCourseDetailsModelSerializer,
-            'update': UpdateCourseDetailsModelSerializer,
+            'list': ListCourseCategoryModelSerializer,
+            'create': CreateCourseCategoryModelSerializer,
+            'retrieve': RetrieveCourseCategoryModelSerializer,
+            'update': UpdateCourseCategoryModelSerializer,
         }
         return serializer_dict.get(self.action, self.serializer_class)
 
@@ -56,6 +57,7 @@ class TeacherModelViewSet(ModelViewSet):
     serializer_class = TeacherModelSerializer
     permission_classes = [AllowAny]
     parser_classes = [MultiPartParser]
+    pagination_class = TeacherPagination
     lookup_url_kwarg = 'id'
     search_fields = ['id', 'first_name', 'last_name']
     filter_backends = [SearchFilter]
@@ -83,6 +85,7 @@ class CourseModelViewSet(ModelViewSet):
     queryset = Course.objects.all().order_by('-created_at')
     serializer_class = CourseModelSerializer
     permission_classes = [AllowAny]
+    pagination_class = CoursePagination
     filter_backends = [SearchFilter]
     lookup_url_kwarg = 'id'
     parser_classes = [MultiPartParser]
@@ -109,6 +112,7 @@ class StudentModelViewSet(ModelViewSet):
     serializer_class = StudentModelSerializer
     permission_classes = [AllowAny]
     parser_classes = [MultiPartParser]
+    pagination_class = StudentPagination
     lookup_url_kwarg = 'id'
     search_fields = ['id', 'title', 'description']
     filter_backends = [SearchFilter]
@@ -133,6 +137,7 @@ class StudentModelViewSet(ModelViewSet):
 class CourseNewModelViewSet(ModelViewSet):
     queryset = CourseNew.objects.all().order_by('-created_at')
     serializer_class = CourseNewModelSerializer
+    pagination_class = CourseNewPagination
     permission_classes = [AllowAny]
     parser_classes = [MultiPartParser]
     lookup_url_kwarg = 'id'
@@ -159,6 +164,7 @@ class CourseNewModelViewSet(ModelViewSet):
 class CourseComplainModelViewSet(ModelViewSet):
     queryset = CourseComplain.objects.all().order_by('-created_at')
     serializer_class = CourseComplainModelSerializer
+    pagination_class = ComplainPagination
     permission_classes = [AllowAny]
     lookup_url_kwarg = 'id'
     search_fields = ['id', 'first_name', 'phone_number']
@@ -184,6 +190,7 @@ class CourseComplainModelViewSet(ModelViewSet):
 class CustomerModelViewSet(ModelViewSet):
     queryset = Customer.objects.all()
     serializer_class = CustomerModelSerializer
+    pagination_class = CustomerPagination
     permission_classes = [AllowAny]
     lookup_url_kwarg = 'id'
     search_fields = ['id', 'phone_number', 'first_name']

@@ -35,12 +35,7 @@ class CourseCategoryModelViewSet(ModelViewSet):
     search_fields = ['id', 'name']
     filter_backends = [SearchFilter]
 
-
-    # def create(self, request, *args, **kwargs):
-    #     """
-    #         FOR CREATE
-    #     """
-    #     return super().create(request, *args, **kwargs)
+    #
 
     def get_serializer_class(self):
         serializer_dict = {

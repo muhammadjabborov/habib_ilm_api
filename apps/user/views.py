@@ -1,6 +1,7 @@
 from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser
@@ -33,6 +34,13 @@ class CourseCategoryModelViewSet(ModelViewSet):
     parser_classes = [MultiPartParser]
     search_fields = ['id', 'name']
     filter_backends = [SearchFilter]
+
+
+    # def create(self, request, *args, **kwargs):
+    #     """
+    #         FOR CREATE
+    #     """
+    #     return super().create(request, *args, **kwargs)
 
     def get_serializer_class(self):
         serializer_dict = {
@@ -209,3 +217,12 @@ class CustomerModelViewSet(ModelViewSet):
         else:
             self.permission_classes = [IsAuthenticated]
         return super(self.__class__, self).get_permissions()
+
+    @action(detail=False, methods=['GET'], url_path='today-orders', serializer_class=serializer_class)
+    def today_customers(self, request):
+        """
+        GET today orders
+        """
+        customers = Customer.objects.all().filter(status='Kutilyapti')
+        serializer = self.serializer_class(customers, many=True)
+        return Response(serializer.data)

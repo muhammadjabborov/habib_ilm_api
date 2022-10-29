@@ -265,7 +265,7 @@ class CourseComplainModelSerializer(ModelSerializer):
 
 
 class CustomerModelSerializer(ModelSerializer):
-    course = CourseModelSerializer(read_only=True)
+    course = CourseCategoryModelSerializer(read_only=True)
 
     class Meta:
         model = Customer

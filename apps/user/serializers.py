@@ -64,13 +64,6 @@ class RetrieveCourseCategoryModelSerializer(ModelSerializer):
 
 
 class TeacherModelSerializer(ModelSerializer):
-    """
-
-    Teacher Serializer
-
-
-    """
-
     class Meta:
         model = Teacher
         exclude = ()

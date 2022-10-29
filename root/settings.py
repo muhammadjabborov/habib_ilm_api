@@ -142,9 +142,6 @@ USE_TZ = True
 
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
-    # {
-    #     'multitude':'for -multitude'
-    # }
 }
 
 APPEND_SLASH = True

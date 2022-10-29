@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
@@ -12,6 +13,7 @@ from rest_framework.viewsets import ViewSet, ModelViewSet
 
 from apps.shared.pagination import CourseCategoryPagination, TeacherPagination, CoursePagination, StudentPagination, \
     CourseNewPagination, ComplainPagination, CustomerPagination
+from apps.user.filters import CustomerFilter
 from apps.user.models import CourseCategory, Course, Teacher, Student, CourseNew, CourseComplain, Customer
 from apps.user.serializers import CourseCategoryModelSerializer, ListCourseCategoryModelSerializer, \
     TeacherModelSerializer, ListTeacherModelSerializer, CreateTeacherModelSerializer, RetrieveTeacherModelSerializer, \
@@ -201,7 +203,8 @@ class CustomerModelViewSet(ModelViewSet):
     permission_classes = [AllowAny]
     lookup_url_kwarg = 'id'
     search_fields = ['id', 'phone_number', 'first_name']
-    filter_backends = [SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = CustomerFilter
 
     def get_serializer_class(self):
         serializer_dict = {

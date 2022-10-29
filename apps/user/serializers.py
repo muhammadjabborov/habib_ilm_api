@@ -285,6 +285,12 @@ class CreateCustomerModelSerializer(ModelSerializer):
 
 class UpdateCustomerModelSerializer(ModelSerializer):
 
+    def validate(self, data):
+        if len(data['phone_number']) > 9:
+            raise ValidationError('The phone number should be 9 numbers')
+
+        return data
+
     class Meta:
         model = Customer
         fields = ('id', 'course', 'first_name', 'phone_number', 'status')

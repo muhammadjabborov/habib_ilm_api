@@ -222,6 +222,6 @@ class CustomerModelViewSet(ModelViewSet):
         """
         GET today orders
         """
-        customers = Customer.objects.all().filter(status='Kutilyapti')
+        customers = Customer.objects.filter(status='Kutilyapti')
         serializer = self.serializer_class(customers, many=True)
         return Response(serializer.data)

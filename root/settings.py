@@ -147,6 +147,7 @@ REST_FRAMEWORK = {
     # }
 }
 
+APPEND_SLASH = True
 LOGIN_URL = '/admin/login/?next=/admin/'
 
 STATIC_URL = '/static/'

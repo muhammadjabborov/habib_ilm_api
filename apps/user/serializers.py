@@ -47,11 +47,6 @@ class UpdateCourseCategoryModelSerializer(ModelSerializer):
 
     """
 
-    def validate(self, data):
-        if CourseCategory.objects.filter(name=data['name']).exists():
-            raise ValidationError('This category name already exists')
-        return data
-
     class Meta:
         model = CourseCategory
         fields = ('id', 'name', 'photo')
@@ -289,15 +284,6 @@ class CreateCustomerModelSerializer(ModelSerializer):
 
 
 class UpdateCustomerModelSerializer(ModelSerializer):
-
-    def validate(self, data):
-        if Customer.objects.filter(phone_number=data['phone_number']).exists():
-            raise ValidationError('This phone_number already exists')
-
-        if len(data['phone_number']) > 9:
-            raise ValidationError('The phone number should be 9 numbers')
-
-        return data
 
     class Meta:
         model = Customer

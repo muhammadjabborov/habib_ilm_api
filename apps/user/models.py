@@ -112,7 +112,7 @@ class Customer(BaseModel):
 
     course = ForeignKey(CourseCategory, on_delete=CASCADE)
     first_name = CharField(max_length=255)
-    phone_number = CharField(max_length=9)
+    phone_number = CharField(max_length=25)
     status = CharField(max_length=25, choices=Status.choices, default=Status.INACTIVE)
 
     class Meta:

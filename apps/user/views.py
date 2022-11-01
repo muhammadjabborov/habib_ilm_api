@@ -228,3 +228,4 @@ class CustomerModelViewSet(ModelViewSet):
         customers = Customer.objects.filter(status='Kutilyapti').order_by('-created_at')
         serializer = self.serializer_class(customers, many=True)
         return Response(serializer.data)
+

@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
@@ -58,11 +58,24 @@ class CourseCategoryModelViewSet(ModelViewSet):
         else:
             self.permission_classes = [AllowAny]
 
-        return super(self.__class__, self).get_permissions()
+        return super().get_permissions()
+
+
+class GetCountAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        teacher_count = Teacher.objects.count()
+        student_count = Student.objects.count()
+        data = {
+            'teachers': teacher_count,
+            'students': student_count
+        }
+        return Response(data)
 
 
 class TeacherModelViewSet(ModelViewSet):
-    queryset = Teacher.objects.all().order_by('-created_at')
+    queryset = Teacher.objects.order_by('-created_at')
     serializer_class = TeacherModelSerializer
     permission_classes = [AllowAny]
     parser_classes = [MultiPartParser]
@@ -87,7 +100,7 @@ class TeacherModelViewSet(ModelViewSet):
         else:
             self.permission_classes = [AllowAny]
 
-        return super(self.__class__, self).get_permissions()
+        return super().get_permissions()
 
 
 class CourseModelViewSet(ModelViewSet):
@@ -113,7 +126,7 @@ class CourseModelViewSet(ModelViewSet):
             self.permission_classes = [IsAuthenticated]
         else:
             self.permission_classes = [AllowAny]
-        return super(self.__class__, self).get_permissions()
+        return super().get_permissions()
 
 
 class StudentModelViewSet(ModelViewSet):
@@ -140,7 +153,7 @@ class StudentModelViewSet(ModelViewSet):
             self.permission_classes = [IsAuthenticated]
         else:
             self.permission_classes = [AllowAny]
-        return super(self.__class__, self).get_permissions()
+        return super().get_permissions()
 
 
 class CourseNewModelViewSet(ModelViewSet):
@@ -167,7 +180,7 @@ class CourseNewModelViewSet(ModelViewSet):
         else:
             self.permission_classes = [AllowAny]
 
-        return super(self.__class__, self).get_permissions()
+        return super().get_permissions()
 
 
 class CourseComplainModelViewSet(ModelViewSet):
@@ -193,7 +206,7 @@ class CourseComplainModelViewSet(ModelViewSet):
         else:
             self.permission_classes = [AllowAny]
 
-        return super(self.__class__, self).get_permissions()
+        return super().get_permissions()
 
 
 class CustomerModelViewSet(ModelViewSet):
@@ -218,7 +231,7 @@ class CustomerModelViewSet(ModelViewSet):
             self.permission_classes = [AllowAny]
         else:
             self.permission_classes = [IsAuthenticated]
-        return super(self.__class__, self).get_permissions()
+        return super().get_permissions()
 
     @action(detail=False, methods=['GET'], url_path='today-orders', serializer_class=serializer_class)
     def today_customers(self, request):
@@ -228,4 +241,3 @@ class CustomerModelViewSet(ModelViewSet):
         customers = Customer.objects.filter(status='Kutilyapti').order_by('-created_at')
         serializer = self.serializer_class(customers, many=True)
         return Response(serializer.data)
-

@@ -6,7 +6,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 import sys
 import os
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'django_filters',
+    'rest_framework_simplejwt',
     'corsheaders',
     'apps.user',
     'apps.admins',
@@ -140,12 +141,31 @@ USE_TZ = True
 #     "https://habibilmapi.pythonanywhere.com/"
 # ]
 
+
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
+}
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
+
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
 APPEND_SLASH = True
-LOGIN_URL = '/admin/login/?next=/admin/'
+LOGIN_URL = '/api/v1/user/login/'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR / 'static')

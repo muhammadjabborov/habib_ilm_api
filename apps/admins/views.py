@@ -8,7 +8,7 @@ from apps.admins.serializers import RegistrationSerializer
 
 class RegisterAPIView(GenericAPIView):
     serializer_class = RegistrationSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)

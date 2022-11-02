@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 from apps.admins.serializers import RegistrationSerializer
@@ -7,6 +8,7 @@ from apps.admins.serializers import RegistrationSerializer
 
 class RegisterAPIView(GenericAPIView):
     serializer_class = RegistrationSerializer
+    permission_classes = [IsAdminUser]
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)

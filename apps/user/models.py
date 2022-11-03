@@ -13,9 +13,9 @@ class CourseCategory(BaseModel):
     photo = ImageField(upload_to='icons/')
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if force_update is True:
+            self.name = slugify(self.name)
         self.slug = slugify(self.name)
-        self.name = slugify(self.name)
-
         super().save(force_insert, force_update, using, update_fields)
 
     def __str__(self):

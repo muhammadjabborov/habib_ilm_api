@@ -186,6 +186,7 @@ class ListStudentModelSerializer(ModelSerializer):
     def to_representation(self, instance):
         represent = super().to_representation(instance)
         represent['course'] = CourseCategoryModelSerializer(instance.course).data
+        represent['teacher'] = TeacherModelSerializer(instance.teacher).data
         return represent
 
     class Meta:
@@ -197,6 +198,7 @@ class RetrieveStudentModelSerializer(ModelSerializer):
     def to_representation(self, instance):
         represent = super().to_representation(instance)
         represent['course'] = CourseCategoryModelSerializer(instance.course).data
+        represent['teacher'] = TeacherModelSerializer(instance.teacher).data
         return represent
 
     class Meta:

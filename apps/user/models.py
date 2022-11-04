@@ -70,6 +70,7 @@ class Student(BaseModel):
     full_name = CharField(max_length=255)
     image = ImageField(upload_to='icons/')
     course = ForeignKey(CourseCategory, on_delete=CASCADE)
+    teacher = ForeignKey(Teacher, on_delete=CASCADE)
     description = CharField(max_length=522)
 
     def __str__(self):

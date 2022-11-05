@@ -5,14 +5,14 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import GenericAPIView
-from rest_framework.parsers import MultiPartParser
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 
 from apps.shared.pagination import CourseCategoryPagination, TeacherPagination, CoursePagination, StudentPagination, \
-    CourseNewPagination, ComplainPagination, CustomerPagination
+    CourseNewPagination, ComplainPagination, CustomerPagination, CustomerTodayPagination
 from apps.user.filters import CustomerFilter
 from apps.user.models import CourseCategory, Course, Teacher, Student, CourseNew, CourseComplain, Customer
 from apps.user.serializers import CourseCategoryModelSerializer, ListCourseCategoryModelSerializer, \
@@ -33,7 +33,7 @@ class CourseCategoryModelViewSet(ModelViewSet):
     serializer_class = CourseCategoryModelSerializer
     lookup_field = 'slug'
     pagination_class = CourseCategoryPagination
-    parser_classes = [MultiPartParser]
+    parser_classes = (MultiPartParser, FormParser,)
     search_fields = ['id', 'name']
     filter_backends = [SearchFilter]
 
@@ -67,9 +67,12 @@ class GetCountAPIView(APIView):
     def get(self, request):
         teacher_count = Teacher.objects.count()
         student_count = Student.objects.count()
+        customer_count = Customer.objects.filter(status="Kutilyapti").count()
+
         data = {
             'teachers': teacher_count,
-            'students': student_count
+            'students': student_count,
+            'customers': customer_count
         }
         return Response(data)
 
@@ -78,7 +81,7 @@ class TeacherModelViewSet(ModelViewSet):
     queryset = Teacher.objects.order_by('-created_at')
     serializer_class = TeacherModelSerializer
     permission_classes = [AllowAny]
-    parser_classes = [MultiPartParser]
+    parser_classes = (MultiPartParser, FormParser,)
     pagination_class = TeacherPagination
     lookup_url_kwarg = 'id'
     search_fields = ['id', 'first_name', 'last_name']
@@ -110,8 +113,7 @@ class CourseModelViewSet(ModelViewSet):
     pagination_class = CoursePagination
     filter_backends = [SearchFilter]
     lookup_url_kwarg = 'id'
-    parser_classes = [MultiPartParser]
-
+    parser_classes = (MultiPartParser, FormParser,)
     def get_serializer_class(self):
         serializer_dict = {
             'list': ListCourseModelSerializer,
@@ -133,7 +135,7 @@ class StudentModelViewSet(ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentModelSerializer
     permission_classes = [AllowAny]
-    parser_classes = [MultiPartParser]
+    parser_classes = (MultiPartParser, FormParser,)
     pagination_class = StudentPagination
     lookup_url_kwarg = 'id'
     search_fields = ['id', 'title', 'description']
@@ -161,7 +163,7 @@ class CourseNewModelViewSet(ModelViewSet):
     serializer_class = CourseNewModelSerializer
     pagination_class = CourseNewPagination
     permission_classes = [AllowAny]
-    parser_classes = [MultiPartParser]
+    parser_classes = (MultiPartParser, FormParser,)
     lookup_url_kwarg = 'id'
     search_fields = ['id', 'title', 'description']
     filter_backends = [SearchFilter]
@@ -233,7 +235,8 @@ class CustomerModelViewSet(ModelViewSet):
             self.permission_classes = [IsAuthenticated]
         return super().get_permissions()
 
-    @action(detail=False, methods=['GET'], url_path='today-orders', serializer_class=serializer_class)
+    @action(detail=False, methods=['GET'], url_path='today-orders', serializer_class=serializer_class,
+            pagination_class=CustomerTodayPagination)
     def today_customers(self, request):
         """
         GET today orders

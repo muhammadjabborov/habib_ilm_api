@@ -146,6 +146,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.MultiPartParser',
+    ],
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
 }
 SWAGGER_SETTINGS = {

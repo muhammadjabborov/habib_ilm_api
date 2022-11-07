@@ -22,7 +22,6 @@ class CreateCourseCategoryModelSerializer(ModelSerializer):
     def validate(self, data):
         if CourseCategory.objects.filter(name=data['name']).exists():
             raise ValidationError('This name already taken')
-
         return data
 
     class Meta:

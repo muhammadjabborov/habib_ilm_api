@@ -9,14 +9,23 @@ from apps.shared.models import BaseModel
 
 class CourseCategory(BaseModel):
     name = CharField(max_length=255)
-    slug = SlugField()
+    slug = SlugField(unique=True)
     photo = ImageField(upload_to='icons/')
 
+    def _get_unique_slug(self):
+        slug = slugify(self.name)
+        unique_slug = slug
+        num = 1
+        while CourseCategory.objects.filter(slug=unique_slug).exists():
+            unique_slug = '{}-{}'.format(slug, num)
+            num += 1
+        return unique_slug
+
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.slug = self._get_unique_slug()
         if force_update is True:
             self.name = slugify(self.name)
-        self.slug = slugify(self.name)
-        super().save(force_insert, force_update, using, update_fields)
+        super().save(force_insert=False, force_update=False, using=None, update_fields=None)
 
     def __str__(self):
         return self.name

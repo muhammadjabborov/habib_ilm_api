@@ -1,7 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import CharField, SlugField, ImageField, ForeignKey, CASCADE, CASCADE, FloatField, IntegerField, \
-    TextChoices
+    TextChoices, URLField
 from django.utils.text import slugify
 
 from apps.shared.models import BaseModel
@@ -45,7 +45,7 @@ class Teacher(BaseModel):
         ]
     )
     description = CharField(max_length=522)
-    url_video = CharField(max_length=255)
+    url_video = URLField()
 
     def __str__(self):
         return self.full_name

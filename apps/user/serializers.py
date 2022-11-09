@@ -80,6 +80,14 @@ class ListTeacherModelSerializer(ModelSerializer):
         fields = ('id', 'full_name', 'image', 'direction')
 
 
+class TeacherListModelSerializer(ModelSerializer):
+    direction = CourseCategoryModelSerializer(read_only=True)
+
+    class Meta:
+        model = Teacher
+        fields = ('id', 'full_name', 'image', 'direction')
+
+
 class CreateTeacherModelSerializer(ModelSerializer):
     direction = CourseCategoryModelSerializer(read_only=True)
     """
@@ -193,6 +201,19 @@ class ListStudentModelSerializer(ModelSerializer):
         fields = ('id', 'image', 'full_name', 'course')
 
 
+class StudentListModelSerializer(ModelSerializer):
+
+    def to_representation(self, instance):
+        represent = super().to_representation(instance)
+        represent['course'] = CourseCategoryModelSerializer(instance.course).data
+        represent['teacher'] = TeacherModelSerializer(instance.teacher).data
+        return represent
+
+    class Meta:
+        model = Student
+        fields = ('id', 'image', 'full_name', 'course', 'description')
+
+
 class RetrieveStudentModelSerializer(ModelSerializer):
     def to_representation(self, instance):
         represent = super().to_representation(instance)
@@ -208,7 +229,7 @@ class RetrieveStudentModelSerializer(ModelSerializer):
 class CreateStudentModelSerializer(ModelSerializer):
     class Meta:
         model = Student
-        fields = ('id', 'full_name', 'image', 'course', 'description')
+        fields = ('id', 'full_name', 'image', 'course', 'teacher', 'description')
 
 
 class UpdateStudentModelSerializer(ModelSerializer):

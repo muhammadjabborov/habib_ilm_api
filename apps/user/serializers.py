@@ -85,7 +85,7 @@ class TeacherListModelSerializer(ModelSerializer):
 
     class Meta:
         model = Teacher
-        fields = ('id', 'full_name', 'image', 'direction')
+        fields = '__all__'
 
 
 class CreateTeacherModelSerializer(ModelSerializer):
@@ -211,7 +211,7 @@ class StudentListModelSerializer(ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ('id', 'image', 'full_name', 'course', 'description')
+        fields = '__all__'
 
 
 class RetrieveStudentModelSerializer(ModelSerializer):

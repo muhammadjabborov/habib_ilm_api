@@ -51,17 +51,17 @@ class CourseCategoryModelViewSet(ModelViewSet):
         }
         return serializer_dict.get(self.action, self.serializer_class)
 
-    # def get_permissions(self):
-    #     if self.action in ['update', 'partial_update', 'destroy', 'create']:
-    #         self.permission_classes = [IsAuthenticated]
-    #     else:
-    #         self.permission_classes = [AllowAny]
-    #
-    #     return super().get_permissions()
+    def get_permissions(self):
+        if self.action in ['update', 'partial_update', 'destroy', 'create']:
+            self.permission_classes = [IsAuthenticated]
+        else:
+            self.permission_classes = [AllowAny]
+
+        return super().get_permissions()
 
 
 class GetCountAPIView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         teacher_count = Teacher.objects.count()
@@ -69,9 +69,9 @@ class GetCountAPIView(APIView):
         customer_count = Customer.objects.filter(status="Kutilyapti").count()
 
         data = {
-            'teachers': teacher_count,
-            'students': student_count,
-            'customers': customer_count
+            'Ustozlar': teacher_count,
+            'Oquvchilar': student_count,
+            'Bugungi_Arizalar': customer_count
         }
         return Response(data)
 
@@ -96,13 +96,13 @@ class TeacherModelViewSet(ModelViewSet):
 
         return serializer_dict.get(self.action, self.serializer_class)
 
-    # def get_permissions(self):
-    #     if self.action in ['create', 'update', 'partial_update', 'delete']:
-    #         self.permission_classes = [IsAuthenticated]
-    #     else:
-    #         self.permission_classes = [AllowAny]
-    #
-    #     return super().get_permissions()
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'delete']:
+            self.permission_classes = [IsAuthenticated]
+        else:
+            self.permission_classes = [AllowAny]
+
+        return super().get_permissions()
 
     @action(methods=['GET'], detail=False, url_path='list', url_name='list-teacher',
             serializer_class=TeacherListModelSerializer, pagination_class=TeacherPagination)
@@ -130,12 +130,12 @@ class CourseModelViewSet(ModelViewSet):
         }
         return serializer_dict.get(self.action, self.serializer_class)
 
-    # def get_permissions(self):
-    #     if self.action in ['create', 'update', 'delete', 'partial_update']:
-    #         self.permission_classes = [IsAuthenticated]
-    #     else:
-    #         self.permission_classes = [AllowAny]
-    #     return super().get_permissions()
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'delete', 'partial_update']:
+            self.permission_classes = [IsAuthenticated]
+        else:
+            self.permission_classes = [AllowAny]
+        return super().get_permissions()
 
 
 class StudentModelViewSet(ModelViewSet):
@@ -157,12 +157,12 @@ class StudentModelViewSet(ModelViewSet):
         }
         return serializer_dict.get(self.action, self.serializer_class)
 
-    # def get_permissions(self):
-    #     if self.action in ['create', 'update', 'delete', 'partial_update']:
-    #         self.permission_classes = [IsAuthenticated]
-    #     else:
-    #         self.permission_classes = [AllowAny]
-    #     return super().get_permissions()
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'delete', 'partial_update']:
+            self.permission_classes = [IsAuthenticated]
+        else:
+            self.permission_classes = [AllowAny]
+        return super().get_permissions()
 
     @action(methods=['GET'], detail=False, url_path='list', url_name='list-student',
             serializer_class=StudentListModelSerializer, pagination_class=StudentPagination)
@@ -189,14 +189,14 @@ class CourseNewModelViewSet(ModelViewSet):
         }
         return serializer_dict.get(self.action, self.serializer_class)
 
-    # def get_permissions(self):
-    #     if self.action in ['update', 'create', 'partial_update', 'delete']:
-    #         self.permission_classes = [IsAuthenticated]
-    #
-    #     else:
-    #         self.permission_classes = [AllowAny]
-    #
-    #     return super().get_permissions()
+    def get_permissions(self):
+        if self.action in ['update', 'create', 'partial_update', 'delete']:
+            self.permission_classes = [IsAuthenticated]
+
+        else:
+            self.permission_classes = [AllowAny]
+
+        return super().get_permissions()
 
 
 class CourseComplainModelViewSet(ModelViewSet):
@@ -215,14 +215,14 @@ class CourseComplainModelViewSet(ModelViewSet):
         }
         return serializer_dict.get(self.action, self.serializer_class)
 
-    # def get_permissions(self):
-    #     if self.action in ['update', 'create', 'partial_update', 'delete']:
-    #         self.permission_classes = [IsAuthenticated]
-    #
-    #     else:
-    #         self.permission_classes = [AllowAny]
-    #
-    #     return super().get_permissions()
+    def get_permissions(self):
+        if self.action in ['update', 'create', 'partial_update', 'delete']:
+            self.permission_classes = [IsAuthenticated]
+
+        else:
+            self.permission_classes = [AllowAny]
+
+        return super().get_permissions()
 
 
 class CustomerModelViewSet(ModelViewSet):
@@ -242,12 +242,12 @@ class CustomerModelViewSet(ModelViewSet):
         }
         return serializer_dict.get(self.action, self.serializer_class)
 
-    # def get_permissions(self):
-    #     if self.action == 'create':
-    #         self.permission_classes = [AllowAny]
-    #     else:
-    #         self.permission_classes = [IsAuthenticated]
-    #     return super().get_permissions()
+    def get_permissions(self):
+        if self.action == 'create':
+            self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated]
+        return super().get_permissions()
 
     @action(detail=False, methods=['GET'], url_path='today-orders', serializer_class=serializer_class,
             pagination_class=CustomerTodayPagination)

@@ -10,7 +10,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
-
 from apps.shared.pagination import CourseCategoryPagination, TeacherPagination, CoursePagination, StudentPagination, \
     CourseNewPagination, ComplainPagination, CustomerPagination, CustomerTodayPagination
 from apps.user.filters import CustomerFilter
@@ -22,7 +21,7 @@ from apps.user.serializers import CourseCategoryModelSerializer, ListCourseCateg
     UpdateStudentModelSerializer, StudentModelSerializer, UpdateCourseModelSerializer, RetrieveCourseModelSerializer, \
     CourseNewModelSerializer, HeadCourseNewModelSerializer, CourseComplainModelSerializer, \
     CreateCourseComplainModelSerializer, CustomerModelSerializer, CreateCustomerModelSerializer, \
-    UpdateCustomerModelSerializer
+    UpdateCustomerModelSerializer, StudentListModelSerializer, TeacherListModelSerializer
 from apps.user.serializers import CreateCourseCategoryModelSerializer, RetrieveCourseCategoryModelSerializer, \
     UpdateCourseCategoryModelSerializer
 
@@ -52,17 +51,17 @@ class CourseCategoryModelViewSet(ModelViewSet):
         }
         return serializer_dict.get(self.action, self.serializer_class)
 
-    def get_permissions(self):
-        if self.action in ['update', 'partial_update', 'destroy', 'create']:
-            self.permission_classes = [IsAuthenticated]
-        else:
-            self.permission_classes = [AllowAny]
-
-        return super().get_permissions()
+    # def get_permissions(self):
+    #     if self.action in ['update', 'partial_update', 'destroy', 'create']:
+    #         self.permission_classes = [IsAuthenticated]
+    #     else:
+    #         self.permission_classes = [AllowAny]
+    #
+    #     return super().get_permissions()
 
 
 class GetCountAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request):
         teacher_count = Teacher.objects.count()
@@ -97,13 +96,20 @@ class TeacherModelViewSet(ModelViewSet):
 
         return serializer_dict.get(self.action, self.serializer_class)
 
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'delete']:
-            self.permission_classes = [IsAuthenticated]
-        else:
-            self.permission_classes = [AllowAny]
+    # def get_permissions(self):
+    #     if self.action in ['create', 'update', 'partial_update', 'delete']:
+    #         self.permission_classes = [IsAuthenticated]
+    #     else:
+    #         self.permission_classes = [AllowAny]
+    #
+    #     return super().get_permissions()
 
-        return super().get_permissions()
+    @action(methods=['GET'], detail=False, url_path='list', url_name='list-teacher',
+            serializer_class=TeacherListModelSerializer, pagination_class=TeacherPagination)
+    def get(self, request):
+        teachers = Teacher.objects.all()
+        serializer = TeacherListModelSerializer(teachers, many=True)
+        return Response(serializer.data)
 
 
 class CourseModelViewSet(ModelViewSet):
@@ -114,6 +120,7 @@ class CourseModelViewSet(ModelViewSet):
     filter_backends = [SearchFilter]
     lookup_url_kwarg = 'id'
     parser_classes = (MultiPartParser, FormParser,)
+
     def get_serializer_class(self):
         serializer_dict = {
             'list': ListCourseModelSerializer,
@@ -123,12 +130,12 @@ class CourseModelViewSet(ModelViewSet):
         }
         return serializer_dict.get(self.action, self.serializer_class)
 
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'delete', 'partial_update']:
-            self.permission_classes = [IsAuthenticated]
-        else:
-            self.permission_classes = [AllowAny]
-        return super().get_permissions()
+    # def get_permissions(self):
+    #     if self.action in ['create', 'update', 'delete', 'partial_update']:
+    #         self.permission_classes = [IsAuthenticated]
+    #     else:
+    #         self.permission_classes = [AllowAny]
+    #     return super().get_permissions()
 
 
 class StudentModelViewSet(ModelViewSet):
@@ -150,12 +157,19 @@ class StudentModelViewSet(ModelViewSet):
         }
         return serializer_dict.get(self.action, self.serializer_class)
 
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'delete', 'partial_update']:
-            self.permission_classes = [IsAuthenticated]
-        else:
-            self.permission_classes = [AllowAny]
-        return super().get_permissions()
+    # def get_permissions(self):
+    #     if self.action in ['create', 'update', 'delete', 'partial_update']:
+    #         self.permission_classes = [IsAuthenticated]
+    #     else:
+    #         self.permission_classes = [AllowAny]
+    #     return super().get_permissions()
+
+    @action(methods=['GET'], detail=False, url_path='list', url_name='list-student',
+            serializer_class=StudentListModelSerializer, pagination_class=StudentPagination)
+    def get(self, request):
+        students = Student.objects.all()
+        serializer = StudentListModelSerializer(students, many=True)
+        return Response(serializer.data)
 
 
 class CourseNewModelViewSet(ModelViewSet):
@@ -175,14 +189,14 @@ class CourseNewModelViewSet(ModelViewSet):
         }
         return serializer_dict.get(self.action, self.serializer_class)
 
-    def get_permissions(self):
-        if self.action in ['update', 'create', 'partial_update', 'delete']:
-            self.permission_classes = [IsAuthenticated]
-
-        else:
-            self.permission_classes = [AllowAny]
-
-        return super().get_permissions()
+    # def get_permissions(self):
+    #     if self.action in ['update', 'create', 'partial_update', 'delete']:
+    #         self.permission_classes = [IsAuthenticated]
+    #
+    #     else:
+    #         self.permission_classes = [AllowAny]
+    #
+    #     return super().get_permissions()
 
 
 class CourseComplainModelViewSet(ModelViewSet):
@@ -201,14 +215,14 @@ class CourseComplainModelViewSet(ModelViewSet):
         }
         return serializer_dict.get(self.action, self.serializer_class)
 
-    def get_permissions(self):
-        if self.action in ['update', 'create', 'partial_update', 'delete']:
-            self.permission_classes = [IsAuthenticated]
-
-        else:
-            self.permission_classes = [AllowAny]
-
-        return super().get_permissions()
+    # def get_permissions(self):
+    #     if self.action in ['update', 'create', 'partial_update', 'delete']:
+    #         self.permission_classes = [IsAuthenticated]
+    #
+    #     else:
+    #         self.permission_classes = [AllowAny]
+    #
+    #     return super().get_permissions()
 
 
 class CustomerModelViewSet(ModelViewSet):
@@ -228,12 +242,12 @@ class CustomerModelViewSet(ModelViewSet):
         }
         return serializer_dict.get(self.action, self.serializer_class)
 
-    def get_permissions(self):
-        if self.action == 'create':
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated]
-        return super().get_permissions()
+    # def get_permissions(self):
+    #     if self.action == 'create':
+    #         self.permission_classes = [AllowAny]
+    #     else:
+    #         self.permission_classes = [IsAuthenticated]
+    #     return super().get_permissions()
 
     @action(detail=False, methods=['GET'], url_path='today-orders', serializer_class=serializer_class,
             pagination_class=CustomerTodayPagination)

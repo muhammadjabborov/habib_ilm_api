@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db.models import Count
 from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -10,6 +11,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
+
+from apps.admins.serializers import UserDataSerializer
 from apps.shared.pagination import CourseCategoryPagination, TeacherPagination, CoursePagination, StudentPagination, \
     CourseNewPagination, ComplainPagination, CustomerPagination, CustomerTodayPagination
 from apps.user.filters import CustomerFilter
@@ -223,6 +226,14 @@ class CourseComplainModelViewSet(ModelViewSet):
             self.permission_classes = [AllowAny]
 
         return super().get_permissions()
+
+
+class UserDataAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserDataSerializer(request.user)
+        return Response(serializer.data)
 
 
 class CustomerModelViewSet(ModelViewSet):

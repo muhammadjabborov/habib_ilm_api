@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from apps.admins.serializers import RegistrationSerializer
+from apps.admins.serializers import RegistrationSerializer, UserDataSerializer
 
 
 class RegisterAPIView(GenericAPIView):
@@ -19,4 +19,11 @@ class RegisterAPIView(GenericAPIView):
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class UserDataAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserDataSerializer(request.user)
+        return Response(serializer.data)
 

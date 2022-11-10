@@ -228,13 +228,6 @@ class CourseComplainModelViewSet(ModelViewSet):
         return super().get_permissions()
 
 
-class UserDataAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        serializer = UserDataSerializer(request.user)
-        return Response(serializer.data)
-
 
 class CustomerModelViewSet(ModelViewSet):
     queryset = Customer.objects.all()

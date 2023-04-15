@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 
 from apps.admins.views import RegisterAPIView
-from apps.admin.views import UserDataAPIView
+from apps.admins.views import UserDataAPIView
 
 urlpatterns = [
     path('user/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

@@ -84,7 +84,7 @@ DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.postgresql',
          'NAME': 'habib_db',
-         'USER': 'jasper',
+         'USER': 'postgres',
          'PASSWORD': 'muhammad',
          'HOST': 'localhost',
          'PORT': 5432

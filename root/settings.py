@@ -22,10 +22,9 @@ sys.path.append(os.path.join(BASE_DIR / 'apps'))
 SECRET_KEY = 'django-insecure-w$8hn66twpt-j^@cz%m)d@0ge&osv%8!k79y^q3+%564do9poy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*', 'api.habibilm.uz']
-
+ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
@@ -85,7 +84,7 @@ DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.postgresql',
          'NAME': 'habib_db',
-         'USER': 'postgres',
+         'USER': 'jasper',
          'PASSWORD': 'muhammad',
          'HOST': 'localhost',
          'PORT': 5432

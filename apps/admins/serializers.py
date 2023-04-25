@@ -27,6 +27,7 @@ class RegistrationSerializer(Serializer):
         validated_data.pop('confirm_password')
         validated_data['password'] = make_password(validated_data['password'])
         user = User(**validated_data)
+        user.is_staff = True
         user.save()
         return user
 
@@ -38,6 +39,4 @@ class RegistrationSerializer(Serializer):
 class UserDataSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'username')
-
-
+        fields = ('id', 'first_name', 'last_name', 'username', 'is_superuser')

@@ -253,8 +253,6 @@ class HeadCourseNewModelSerializer(ModelSerializer):
 class CreateCourseComplainModelSerializer(ModelSerializer):
 
     def validate(self, data):
-        if CourseComplain.objects.filter(phone_number=data['phone_number']).exists():
-            raise ValidationError('This phone number already exists')
         if data['phone_number'] is None:
             raise ValidationError('The phone number can not be none')
 

@@ -219,14 +219,14 @@ class CourseComplainModelViewSet(ModelViewSet):
         return serializer_dict.get(self.action, self.serializer_class)
 
     def get_permissions(self):
-        if self.action in ['update', 'create', 'partial_update', 'delete']:
+        if self.action in ['list']:
             self.permission_classes = [IsAuthenticated]
-
+        elif self.action in ['update', 'partial_update', 'delete', 'retrieve']:
+            self.permission_classes = [IsAdminUser]
         else:
             self.permission_classes = [AllowAny]
 
         return super().get_permissions()
-
 
 
 class CustomerModelViewSet(ModelViewSet):

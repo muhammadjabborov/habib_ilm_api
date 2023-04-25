@@ -117,7 +117,7 @@ class Customer(BaseModel):
     class Status(TextChoices):
         INACTIVE = "Kutilyapti"
         ACTIVE = "Qabul qilindi"
-        REJECT = "Qabdul qilinmadi"
+        REJECT = "Qabul qilinmadi"
         POSTPONED = "Keyinroqqa qo'yildi"
 
     course = ForeignKey(CourseCategory, on_delete=CASCADE)

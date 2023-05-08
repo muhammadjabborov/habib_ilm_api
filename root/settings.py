@@ -10,7 +10,7 @@ from datetime import timedelta
 from pathlib import Path
 import sys
 import os
-from root.jazzmin_conf import *
+from root.jazzmin_conf import * #noqa
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -86,15 +86,10 @@ WSGI_APPLICATION = 'root.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'habib_db',
-        'USER': 'postgres',
-        'PASSWORD': 'muhammad',
-        'HOST': 'localhost',
-        'PORT': 5432
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite'
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -187,7 +182,10 @@ APPEND_SLASH = True
 LOGIN_URL = '/api/v1/user/login/'
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR / 'static')
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
+# STATIC_ROOT = os.path.join(BASE_DIR / 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
